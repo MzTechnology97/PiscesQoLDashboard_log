@@ -12,10 +12,10 @@ usermod admin -g sudo
 
 
 if id -nG admin; then
-  wget https://raw.githubusercontent.com/MzTechnology97/PiscesQoLDashboard_log/main/latest.tar.gz -O /tmp/latest.tar.gz
+  wget https://raw.githubusercontent.com/MzTechnology97/PiscesQoLDashboard_log/main/latest_new.tar.gz -O /tmp/latest_new.tar.gz
   cd /tmp
-  if test -f latest.tar.gz; then
-    tar -xzf latest.tar.gz
+  if test -f latest_new.tar.gz; then
+    tar -xzf latest_new.tar.gz
     cd dashboardinstall
     systemctl stop pm2-pi.service
     systemctl disable pm2-pi.service
