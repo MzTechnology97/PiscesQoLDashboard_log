@@ -15,7 +15,6 @@ fi
 
 
 if id -nG admin | grep -qw "sudo"; then
-  rm -rf /dashboard/pages/home.php
   rm -rf /tmp/latest_new.tar.gz
   rm -rf /tmp/dashboardinstall
   echo 'Downloading latest release...' > /var/dashboard/logs/dashboard-update.log
@@ -66,7 +65,6 @@ if id -nG admin | grep -qw "sudo"; then
     chmod 775 /var/dashboard/vpn/*
     chmod 775 /var/dashboard/services/*
     chmod 775 /var/dashboard/statuses/*
-    chmod 775 /var/dashboard/pages/*
     chown root:www-data /var/dashboard
     chmod 775 /var/dashboard
     
