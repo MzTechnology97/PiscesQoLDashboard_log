@@ -55,6 +55,7 @@ else
 				<li <?php if($page == 'tools') { echo 'class="active_page"'; } ?>><a href="/?page=tools" title="Tools"><span class="icon-wrench"></span><span class="text">Tools</span></a></li>
 				<li <?php if($page == 'info') { echo 'class="active_page"'; } ?>><a href="/?page=info" title="Information"><span class="icon-info"></span><span class="text">Info</span></a></li>
 				<li <?php if($page == 'logs') { echo 'class="active_page"'; } ?>><a href="/?page=logs" title="Logs"><span class="icon-list"></span><span class="text">Logs</span></a></li>
+				<li <?php if($page == 'logs' || $page == 'minerloganalyzer') { echo 'class="active_page"'; } ?>><a href="/?page=logs" title="Logs"><span class="icon-list"></span><span class="text">Logs</span></a></li>
 			</ul>
 
 		</nav>
@@ -79,6 +80,10 @@ else
 					include('/var/dashboard/pages/logs.php');
 					break;
 
+				case 'minerloganalyzer':
+					include('/var/dashboard/pages/minerloganalyzer.php');
+					break;
+					
 				case '404':
 					include('/var/dashboard/pages/404.php');
 					break;
