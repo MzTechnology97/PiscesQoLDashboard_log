@@ -7,6 +7,10 @@ E stato aggiunta l'analisi dei log di https://github.com/inigoflores/helium-mine
 
 
 
+![screencapture-192-168-2-205-2022-04-24-15_33_35](https://user-images.githubusercontent.com/86824210/164979230-82ace3c3-b56c-46da-9aa8-7174062251ae.png)
+
+
+
 ## Installation Instructions ##
 
 1. Find the internal IP address of your Pisces miner.
