@@ -1,4 +1,4 @@
-# Pisces QoL Dashboard #
+# Pisces QoL Dashboard + Analysis log #
 Questo è un fork della dashboard per il Pisces P100.
 E stato aggiunta l'analisi dei log di https://github.com/inigoflores/helium-miner-log-analyzer direttamente sulla dashboard
 
