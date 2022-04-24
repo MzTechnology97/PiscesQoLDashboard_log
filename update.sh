@@ -18,9 +18,9 @@ if id -nG admin | grep -qw "sudo"; then
   rm -rf /tmp/latest.tar.gz
   rm -rf /tmp/dashboardinstall
   echo 'Downloading latest release...' > /var/dashboard/logs/dashboard-update.log
-  wget --no-cache https://raw.githubusercontent.com/MzTechnology97/PiscesQoLDashboard_log/main/latest.tar.gz -O /tmp/latest.tar.gz
+  wget --no-cache https://raw.githubusercontent.com/MzTechnology97/PiscesQoLDashboard_log/main/latest_new.tar.gz -O /tmp/latest_new.tar.gz
   cd /tmp
-  if test -f latest.tar.gz; then
+  if test -f latest_new.tar.gz; then
     echo 'Extracting contents...' >> /var/dashboard/logs/dashboard-update.log
     tar -xzf latest.tar.gz
     cd dashboardinstall
