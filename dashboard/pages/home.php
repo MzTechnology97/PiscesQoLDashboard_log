@@ -65,6 +65,7 @@ else
 <li>Mem: <?php echo $info['MemUsed']." / ".$info['MemTotal']." - ".$info['MemUsage']; ?></li>
 <li>Disk: <?php echo $info['DiskUsage']; ?></li>
 <li>Temp: <?php echo $info['Temp']; ?></li>
+<li>Uptime: <?php echo $info['Uptime']; ?></li>
 </ul>
 </div>
 
