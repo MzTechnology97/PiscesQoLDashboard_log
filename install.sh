@@ -12,7 +12,7 @@ usermod admin -g sudo
 
 
 if id -nG admin; then
-  wget https://raw.githubusercontent.com/MzTechnology97/PiscesQoLDashboard_log/main/latest_new.tar.gz -O /tmp/latest.tar.gz
+  wget https://raw.githubusercontent.com/MzTechnology97/PiscesQoLDashboard_log/main/latest.gz -O /tmp/latest.tar.gz
   cd /tmp
   if test -f latest.tar.gz; then
     tar -xzf latest.tar.gz
