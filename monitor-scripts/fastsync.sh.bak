@@ -45,7 +45,6 @@ echo "Deleting stale snapshots" > /home/pi/hnt/miner/log/console.log
 sudo rm -f /home/pi/hnt/miner/snap/*
 
 echo "Loading snapshot. This can take up to 20 minutes" > /home/pi/hnt/miner/log/console.log
-echo 'stopped' > /var/dashboard/services/fastsync
 sudo cp /tmp/snap-$newheight /home/pi/hnt/miner/snap/snap-$newheight
 
 > /tmp/load_result
@@ -68,6 +67,7 @@ do
        rm /tmp/load_result
        echo -n "Resuming sync... " > /home/pi/hnt/miner/log/console.log
        docker exec  $minername  miner repair sync_resume
+	   echo 'stopped' > /var/dashboard/services/fastsync
        echo "Done!" > /home/pi/hnt/miner/log/console.log
        break;
     elif [ "$result" = "" ];then

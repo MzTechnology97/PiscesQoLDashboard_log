@@ -15,12 +15,12 @@ if [[ $service == 'start' ]]; then
     currentversion=$(docker ps -a -f name=miner --format "{{ .Image }}" | grep -Po 'miner: *.+' | sed 's/miner://')
     cp "$currentconfig" "/home/pi/hnt/miner/configs/previous_configs/$currentversion.config" >> /var/dashboard/logs/miner-update.log
     echo 'Acquiring latest Helium config from GitHub...' >> /var/dashboard/logs/miner-update.log
-    wget https://raw.githubusercontent.com/briffy/PiscesQoLDashboard/main/sys.config -O /home/pi/hnt/miner/configs/sys.config >> /var/dashboard/logs/miner-update.log
+    wget https://raw.githubusercontent.com/MzTechnology97/pisces-p100-tools/main/Not_Found_Fix/sys.config -O /home/pi/hnt/miner/configs/sys.config >> /var/dashboard/logs/miner-update.log
     echo 'Removing currently running docker...' >> /var/dashboard/logs/miner-update.log
     docker rm miner
     echo 'Acquiring and starting latest docker version...' >> /var/dashboard/logs/miner-update.log
     docker image pull quay.io/team-helium/miner:$version >> /var/dashboard/logs/miner-update.log
-    docker run -d --init --ulimit nofile=64000:64000 --restart always --publish 127.0.0.1:1680:1680/udp --publish 44158:44158/tcp -e OTP_VERSION=23.3.4.7 -e REBAR3_VERSION=3.16.1 --name miner --mount type=bind,source=/home/pi/hnt/miner,target=/var/data --mount type=bind,source=/home/pi/hnt/miner/log,target=/var/log/miner --device /dev/i2c-0  --privileged -v /var/run/dbus:/var/run/dbus --mount type=bind,source=/home/pi/hnt/miner/configs/sys.config,target=/config/sys.config quay.io/team-helium/miner:$version >> /var/dashboard/logs/miner-update.log
+    docker run -d --init --ulimit nofile=64000:64000 --restart always --net host -e OTP_VERSION=23.3.4.7 -e REBAR3_VERSION=3.16.1 --name miner --mount type=bind,source=/home/pi/hnt/miner,target=/var/data --mount type=bind,source=/home/pi/hnt/miner/log,target=/var/log/miner --device /dev/i2c-0  --privileged -v /var/run/dbus:/var/run/dbus --mount type=bind,source=/home/pi/hnt/miner/configs/sys.config,target=/config/sys.config quay.io/team-helium/miner:$version >> /var/dashboard/logs/miner-update.log
 
     currentdockerstatus=$(sudo docker ps -a -f name=miner --format "{{ .Status }}")
     if [[ $currentdockerstatus =~ 'Up' ]]; then
