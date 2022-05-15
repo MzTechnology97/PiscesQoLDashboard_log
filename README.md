@@ -2,7 +2,7 @@
 Questo è un fork della dashboard per il Pisces P100.
 E stato aggiunta l'analisi dei log di https://github.com/inigoflores/helium-miner-log-analyzer direttamente sulla dashboard
 
-![image](https://user-images.githubusercontent.com/86824210/168473070-8504b304-0451-45de-9643-6946cd920be0.png)
+
 
 
 
