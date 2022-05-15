@@ -79,11 +79,6 @@ else
 				case 'logs':
 					include('/var/dashboard/pages/logs.php');
 					break;
-					
-				case 'minerloganalyzer':
-					include('/var/dashboard/pages/minerloganalyzer.php');
-					break;
-
 
 				case '404':
 					include('/var/dashboard/pages/404.php');
@@ -133,10 +128,10 @@ else
 		</section>
 
 		<footer>
-			<a href="https://github.com/MzTechnology97/PiscesQoLDashboard_log">Dashboard</a> Version: <?php echo $info['Version'];
+			<a href="https://github.com/briffy/PiscesQoLDashboard">Dashboard</a> Version: <?php echo $info['Version'];
 			if($info['Version'] != $info['Update'])
 			{
-				echo ' - <a href="https://github.com/MzTechnology97/PiscesQoLDashboard_log" title="Update Releases">Update Available - '.$info['Update'].'</a>';
+				echo ' - <a href="https://github.com/briffy/PiscesQoLDashboard" title="Update Releases">Update Available - '.$info['Update'].'</a>';
 			}
 			?>
 			<br />Miner Version: <?php echo $info['MinerVersion'];
