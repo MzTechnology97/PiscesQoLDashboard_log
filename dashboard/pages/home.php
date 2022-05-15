@@ -29,6 +29,8 @@ $info['ExternalIP'] = trim(file_get_contents("/var/dashboard/statuses/external-i
 $info['CPU'] = $load[0];
 $info['DiskUsage'] = round($diskused/$disktotal*100, 2)."%";
 
+$vpn = explode(":", file_get_contents('/var/dashboard/services/vpn'));
+
 $gps = trim(file_get_contents("/var/dashboard/statuses/gps"));
 $pf = trim(file_get_contents("/var/dashboard/statuses/packet-forwarder"));
 $info['BT'] = trim(ucfirst(file_get_contents("/var/dashboard/statuses/bt")));
@@ -37,6 +39,8 @@ $info['Temp'] = trim(file_get_contents("/var/dashboard/statuses/temp"));
 $info['WiFi'] = trim(file_get_contents("/var/dashboard/statuses/wifi"));
 $info['AutoMaintain'] = trim(file_get_contents("/var/dashboard/services/auto-maintain"));
 $info['AutoUpdate'] = trim(file_get_contents("/var/dashboard/services/auto-update"));
+$info['Uptime'] = str_replace("up ", "", shell_exec('uptime -p'));
+$info['VPN'] = trim($vpn[0]);
 if($gps == 1)
 {
 $info['GPS'] = 'Enabled';
@@ -65,6 +69,7 @@ else
 <li>Mem: <?php echo $info['MemUsed']." / ".$info['MemTotal']." - ".$info['MemUsage']; ?></li>
 <li>Disk: <?php echo $info['DiskUsage']; ?></li>
 <li>Temp: <?php echo $info['Temp']; ?></li>
+<li>Uptime: <?php echo $info['Uptime']; ?></li>
 </ul>
 </div>
 
@@ -191,6 +196,23 @@ else
 echo '<li id="AutoUpdate_status" class="disabled">';
 echo '<a href="#" onclick="EnableService(\'AutoUpdate\');" title="AutoUpdate disabled">';
 echo '<span class="icon-loop2"></span>';
+echo '</a>';
+echo '</li>';
+}
+
+if($info['VPN'] == 'enabled')
+{
+echo '<li id="VPN_status" class="enabled">';
+echo '<a href="#" onclick="DisableService(\'VPN\');" title="VPN enabled">';
+echo '<span class="icon-settings_ethernet"></span>';
+echo '</a>';
+echo '</li>';
+}
+else
+{
+echo '<li id="VPN_status" class="disabled">';
+echo '<a href="#" onclick="EnableService(\'VPN\');" title="VPN disabled">';
+echo '<span class="icon-settings_ethernet"></span>';
 echo '</a>';
 echo '</li>';
 }

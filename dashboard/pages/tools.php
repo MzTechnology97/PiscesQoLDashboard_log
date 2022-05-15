@@ -54,5 +54,12 @@
 				<span class="button_title">Clear BlockChain Data</span>
 			</a>
 		</li>
+
+		<li id="set_vpn_button">
+			<a href="?page=configurevpn" title="Configure VPN">
+				<span class="icon-settings_ethernet"></span>
+				<span class="button_title">Configure VPN</span>
+			</a>
+		</li>
 	</ul>
 </div>
