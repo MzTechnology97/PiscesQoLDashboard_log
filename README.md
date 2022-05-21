@@ -1,6 +1,12 @@
-# Pisces QoL Dashboard + Analysis log #
+# Pisces QoL Dashboard + Miner Alyzer log + Packet Forwarder analyzer
 Questo è un fork della dashboard per il Pisces P100.
-E stato aggiunta l'analisi dei log di https://github.com/inigoflores/helium-miner-log-analyzer direttamente sulla dashboard
+E stato aggiunta l'analisi dei log di:
+https://github.com/inigoflores/helium-miner-log-analyzer
+https://github.com/inigoflores/lora-packet-forwarder-analyzer
+direttamente sulla dashboard
+
+![image](https://user-images.githubusercontent.com/86824210/169670169-80e98349-b015-48a2-94bd-cf1ff813dad3.png)
+
 
 ![image](https://user-images.githubusercontent.com/86824210/169652829-dc78392c-25af-470e-9de2-65a7c8e10a5a.png)
 
