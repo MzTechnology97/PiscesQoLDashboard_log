@@ -9,7 +9,7 @@ $connectedvalidator = shell_exec('netstat -atn | grep 8080');
 $connectedvalidator = substr($connectedvalidator, -36);
 $logs['beacon'] = shell_exec('tac /home/pi/hnt/miner/log/console.log | grep -E "tx_power_corrected|tx_power|TX_POWER"');
 ?>
-<h1>Sensecap M1 Miner Dashboard - Information</h1>
+<h1>Pisces P100 Outdoor Miner Dashboard - Information</h1>
 
 
 <div class="log_container">

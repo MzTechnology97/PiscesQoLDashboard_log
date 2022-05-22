@@ -41,6 +41,14 @@ $info['AutoMaintain'] = trim(file_get_contents("/var/dashboard/services/auto-mai
 $info['AutoUpdate'] = trim(file_get_contents("/var/dashboard/services/auto-update"));
 $info['Uptime'] = str_replace("up ", "", shell_exec('uptime -p'));
 $info['VPN'] = trim($vpn[0]);
+if($gps == 1)
+{
+$info['GPS'] = 'Enabled';
+}
+else
+{
+$info['GPS'] = 'Disabled';
+}
 
 if($pf > 0)
 {
@@ -51,7 +59,7 @@ else
 	$info['PF'] = 'Disabled';
 }
 ?>
-<h1>Sensecap M1 Miner Dashboard</h1>
+<h1>Pisces P100 Outdoor Miner Dashboard</h1>
 
 <div id="miner_info">
 <h2>Miner Information</h2>
@@ -69,6 +77,23 @@ else
 <h2>Enable/disable Services</h2>
 <ul>
 <?php
+if($info['GPS'] == 'Enabled')
+{
+echo '<li id="GPS_status" class="enabled">';
+echo '<a href="#" onclick="DisableService(\'GPS\');" title="GPS enabled">';
+echo '<span class="icon-gps_fixed"></span>';
+echo '</a>';
+echo '</li>';
+}
+else
+{
+echo '<li id="GPS_status" class="disabled">';
+echo '<a href="#" onclick="EnableService(\'GPS\');" title="GPS disabled">';
+echo '<span class="icon-gps_off"></span>';
+echo '</a>';
+echo '</li>';
+
+}
 if($info['BT'] == 'On')
 {
 echo '<li id="BT_status" class="enabled">';
