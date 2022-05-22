@@ -10,7 +10,8 @@ https://github.com/inigoflores/lora-packet-forwarder-analyzer
 
 
 
-![image](https://user-images.githubusercontent.com/86824210/169670169-80e98349-b015-48a2-94bd-cf1ff813dad3.png)
+![image](https://user-images.githubusercontent.com/86824210/169693145-129a343e-ba52-4dac-bc59-35830318d5fd.png)
+
 
 
 ![image](https://user-images.githubusercontent.com/86824210/169652829-dc78392c-25af-470e-9de2-65a7c8e10a5a.png)
