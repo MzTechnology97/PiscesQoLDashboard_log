@@ -4,8 +4,8 @@
  *
  * Extracts witness data from Helium miner logs
  *
- * @author     Iñigo Flores
- * @copyright  2022 Iñigo Flores
+ * @author     I�igo Flores
+ * @copyright  2022 I�igo Flores
  *             2022 Fengling
  * @license    https://opensource.org/licenses/MIT  MIT License
  * @version    0.01
@@ -23,58 +23,67 @@ $opts = getopt(implode("",$options));
 
 // Defaults to stats when called
 if (!(isset($opts['l']) || isset($opts['c']))) {
-    $opts['a']=true;
+	$opts['a']=true;
 }
 
 foreach ($options as $key=>$val){
-    $options[$key] = str_replace(":","",$val);
+	$options[$key] = str_replace(":","",$val);
 }
 
 uksort($opts, function ($a, $b) use ($options) {
-    $pos_a = array_search($a, $options);
-    $pos_b = array_search($b, $options);
-    return $pos_a - $pos_b;
+	$pos_a = array_search($a, $options);
+	$pos_b = array_search($b, $options);
+	return $pos_a - $pos_b;
 });
+
 
 // Handle command line arguments
 foreach (array_keys($opts) as $opt) switch ($opt) {
-    case 'p':
-        $logsFolder = $opts['p'];
-        if (substr($logsFolder,strlen($logsFolder)-1) != "/"){
-            $logsFolder.="/";
-        };
-        break;
-    case 's':
-        if (!DateTime::createFromFormat('Y-m-d',  $opts['s'])){
-            exit("Wrong date format");
-        }
-        $startDate = $opts['s'];
-        break;
-    case 'e':
-        if (!DateTime::createFromFormat('Y-m-d',  $opts['e'])){
-            exit("Wrong date format");
-        }
-        $endDate = $opts['e'];
-        break;
-    case 'a':
-        echo "\nUsing logs in folder {$logsFolder}\n\n";
-        $beacons = extractData($logsFolder,$startDate,$endDate);
-        echo generateStats($beacons);
-        exit(1);
+case 'p':
+	$logsFolder = $opts['p'];
+	if (substr($logsFolder,strlen($logsFolder)-1) != "/"){
+		$logsFolder.="/";
+	};
+	break;
+case 's':
+	if (!DateTime::createFromFormat('Y-m-d',  $opts['s'])){
+		echo "Wrong date format";
+		break;
+	}
+	$startDate = $opts['s'];
+	break;
+case 'e':
+	if (!DateTime::createFromFormat('Y-m-d',  $opts['e'])){
+		echo "Wrong date format";
+		break;
+	}
+	$endDate = $opts['e'];
+	break;
+case 'a':
+	echo "<div class=\"log_container\">";
+	echo "\nUsing logs in folder {$logsFolder}\n\n";
+	$beacons = extractData($logsFolder,$startDate,$endDate);
+	echo generateStats($beacons);
+	echo generateList($beacons);
+	echo "</div>";
+	break;
 
-    case 'l':
-        echo "\nUsing logs in folder {$logsFolder}\n\n";
-        $beacons = extractData($logsFolder,$startDate,$endDate);
-        echo generateList($beacons);
-        exit(1);
-        
-    case 'c':
-        $beacons = extractData($logsFolder,$startDate,$endDate);
-        $filename = $opts['c'];
-        echo generateCSV($beacons,$filename);
-        exit(1);        
+case 'l':
+	echo "<div class=\"log_container\">";
+	echo "\nUsing logs in folder {$logsFolder}\n\n";
+	$beacons = extractData($logsFolder,$startDate,$endDate);
+	echo generateList($beacons);
+	echo "</div>";
+	break;
+
+case 'c':
+	echo "<div class=\"log_container\">";
+	$beacons = extractData($logsFolder,$startDate,$endDate);
+	$filename = $opts['c'];
+	echo generateCSV($beacons,$filename);
+	echo "</div>";
+	break;
 }
-
 
 /*
  * -------------------------------------------------------------------------------------------------
@@ -89,37 +98,42 @@ foreach (array_keys($opts) as $opt) switch ($opt) {
 function generateStats($beacons) {
 
 
-    if (empty($beacons)) {
-        exit("No witnesses found\n");
-    }
+	if (empty($beacons)) {
+		return '<br><br><br><h2>No witnesses found</h2>';
+	}
 
-    $startTime = DateTime::createFromFormat('Y-m-d H:i:s',explode('.',$beacons[0]['datetime'])[0]);
-    $endTime = DateTime::createFromFormat('Y-m-d H:i:s',explode('.',end($beacons)['datetime'])[0]);
-    $intervalInHours = ($endTime->getTimestamp() - $startTime->getTimestamp())/3600;
+	$startTime = DateTime::createFromFormat('Y-m-d H:i:s',explode('.',$beacons[0]['datetime'])[0]);
+	$endTime = DateTime::createFromFormat('Y-m-d H:i:s',explode('.',end($beacons)['datetime'])[0]);
+	$intervalInHours = ($endTime->getTimestamp() - $startTime->getTimestamp())/3600;
 
-    $successful = 0;
+	$successful = 0;
 
-    foreach ($beacons as $beacon){
+	foreach ($beacons as $beacon){
 
-        // General Witnesses Overview
-        if ($beacon['status']=='successfully sent') {
-            $successful++;
-        }
+		// General Witnesses Overview
+		if ($beacon['status']=='successfully sent') {
+			$successful++;
+		}
 
-    }
+		
+	}
 
 	$total = sizeOf($beacons);
 	$totalFailed = $total - $successful;
 	$totalPerHour = round($total / $intervalInHours,2);
-	
-	
+
+	$totalFailedOther = $failedNoListenAddress +  $failedConRefused + $failedHostUnreach;
+
 	$percentageSuccessful = round($successful/$total*100,2);
 	$percentageFailed = round($totalFailed/$total*100,2);
 
-	$output = '<br><br><p><br><h2 style="color:#AED6F1;">General Witnesses Overview</h2></p><br>';
+	$percentageRelayUnknown = round(($total-$notRelayed-$relayed)/$total*100,2);
+	$Unknown = $total - $notRelayed - $relayed;
+
+	$output = '<br><br><p><br><h2 style="color:#F0FF00;">General Witnesses Overview</h2></p><br>';
 	$output.='<table border="1" style="width: 100%; height: 100%">';
 	$output.= "
-		<tr border='1' align='left' style='color:#FCF3CF ;' >
+		<tr border='1' align='left' style='color:#F0FF00' >
 		<th style='width:60%'> Description </th>
 		<th align='center'> Value </th>
 		<th align='center'> Precentage </th>
@@ -131,88 +145,20 @@ function generateStats($beacons) {
 			 <td align='center'> {$totalPerHour} / hour  </td>
 		</tr>";
 	$output.= "
-		<tr border='1'>
+		<tr border='1' style='color: #30ff00 ' >
 			<td> Succesfully delivered  </td>
 			<td align='center'> {$successful} </td>
 			 <td align='center'> {$percentageSuccessful} %</td>
 		</tr> ";
 	$output.= "
-		<tr border='1'>
+		<tr border='1'style='color:	#FF0000 ' >
 			<td> Failed  </td>
 			 <td align='center'> {$totalFailed} </td>
 			 <td align='center'> {$percentageFailed}% </td>
 		</tr> ";
-	$output.= "
-		<tr border='1'>
-			<td> ├── Max retry </td>
-			<td align='center'> {$failedMaxRetry} </td>
-			<td align='center'> {$percentageFailedMaxRetry}% </td>
-		</tr> ";
-     $output.= "
-		<tr border='1'>
-			<td> └── Crash/reboot </td>
-			<td align='center'> {$failedIncomplete} </td>
-			<td align='center'> {$percentageFailedIncomplete}% </td>
-		</tr> ";
-	$output.= " </table>";
-	$output .=  '<br><p><br><h2 style="color:#AED6F1;"> Max Retry Failure Reasons </h2></p><br>';
-	$output.='<table border="1" style="width: 100%; height: 100%">';
-	$output.= "
-		<tr border='1' align='left' style='color:#FCF3CF ;' >
-		<th style='width:60%'>Description </th>
-		<th align='center'> Value  </th>
-		<th align='center'> Precentage </th>
-		</tr>";
-	$output.= "
-		<tr border='1'>
-			<td> Timeout </td>
-			  <td align='center'> {$failedTimeout} </td>
-			 <td align='center'> {$percentageFailedTimeout}%  </td>
-		</tr>";
-	$output.= "
-		<tr border='1'>
-			<td> Not Found  </td>
-			<td align='center'> {$failedNotFound} </td>
-			 <td align='center'> {$percentageFailedNotFound}%</td>
-		</tr> ";
-	$output.= "
-		<tr border='1'>
-			<td> Other challenger issues   </td>
-			 <td align='center'> {$totalFailedOther} </td>
-			 <td align='center'> {$percentageFailedOther}% </td>
-		</tr> ";
 
 	$output.= " </table>";
 
-
-	$output .=  '<br><p><br><h2 style="color: #AED6F1;"> Challengers </h2></p><br>';
-	$output.='<table border="1" style="width: 100%; height: 100%">';
-	$output.= "
-		<tr border='1' align='left' style='color:#FCF3CF ;' >
-		<th style='width:60%'> Description </th>
-		<th align='center'> Value </th>
-		<th align='center'> Precentage </th>
-		</tr>";
-	$output.= "
-		<tr border='1'>
-			<td> Not Relayed  </td>
-			  <td align='center'> {$notRelayed} </td>
-			 <td align='center'>  {$percentageNotRelayed}%  </td>
-		</tr>";
-	$output.= "
-		<tr border='1'>
-			<td> Relayed  </td>
-			<td align='center'> {$relayed} </td>
-			 <td align='center'> {$percentageRelayed}%</td>
-		</tr> ";
-	$output.= "
-		<tr border='1'>
-			<td> Unknown (Probably Not Relayed)   </td>
-			 <td align='center'> {$Unknown } </td>
-			 <td align='center'> {$percentageRelayUnknown}% </td>
-		</tr> ";
-
-	$output.= " </table>";
 
 	return $output;
 }
@@ -226,7 +172,7 @@ function generateList($beacons) {
 	if (empty($beacons)) {
 		return;
 	}
-	$output = '<br><p><br><h2 style="color:#AED6F1;">Witnesses List</h2></p>';
+	$output = '<br><p><br><h2 style="color:#F0FF00;">Witnesses List</h2></p>';
 	$output .= '<br>
 		<table border="1" style="width: 100%; height: 100%">
 		<tr style="color:#FCF3CF ;">
@@ -236,7 +182,6 @@ function generateList($beacons) {
 		<th>SNR</th>
 		<th>Noise</th>
 		<th>Status</th>
-		<th>Reason</th>
 		</tr>';
 
 	foreach (array_reverse($beacons) as $beacon){
@@ -247,32 +192,28 @@ function generateList($beacons) {
 		$status = str_pad($beacon['status'], 17, " ", STR_PAD_RIGHT);
 		$failures = str_pad(empty($beacon['failures'])?0:$beacon['failures'], 5, " ", STR_PAD_LEFT);
 		$reasonShort = @$beacon['reasonShort'];
-		#$challenger = @str_pad($beacon['challenger'],52, " ", STR_PAD_RIGHT);
-		#$relayed = @str_pad($beacon['relayed'],5, " ", STR_PAD_RIGHT);
-		
-		#$reason = @$beacon['reason'];
-		#$session = str_pad($beacon['session'],11, " ", STR_PAD_LEFT);;
+		$session = str_pad($beacon['session'],11, " ", STR_PAD_LEFT);;
 
-		$dt = new DateTime($beacon['datetime']);
-		##$dt->modify('+4 hours');
+		$dt = DateTime::createFromFormat('Y-m-d H:i:s.u',$beacon['datetime']);
+        $dt->setTimezone(new DateTimeZone( "Europe/Rome" )); 
+		
+		#$dt->modify('+4 hours');
 
 		$output.=@"
 		<tr border='1'>
-			<td> {$dt->format('M-d H:i:s')} </td>
+			<td> {$dt->format("d-m-Y H:i:s")} </td>
 			<td> {$rssi} </td>
 			<td> {$beacon['freq']} </td>
 			<td> {$snr} </td>
 			<td> {$noise} </td>
 			<td> {$status} </td>
-			<td> {$failures} </td>
-			<td> {$reasonShort} </td>
 		</tr>";
 	}
 
 	return $output."</table>";
 }
 function generateList2($beacons) {
-	$output = "<br><br>Date                    | RSSI | Freq  | SNR   | Noise                                             | Relay | Status            | Fails | Reason <br>";
+	$output = "<br><br>Date                    | RSSI | Freq  | SNR   | Noise    | Status                                         | Relay | Status            | Fails | Reason <br>";
 	$output.= "------------------------------------------------------------------------------------ <br>";
 
 	foreach ($beacons as $beacon){
@@ -282,12 +223,13 @@ function generateList2($beacons) {
 		$noise = str_pad(number_format((float) ($beacon['rssi'] - $beacon['snr']),1),6,  " ", STR_PAD_LEFT);
 		$status = str_pad($beacon['status'], 17, " ", STR_PAD_RIGHT);
 		$reasonShort = @$beacon['reasonShort'];
+	//	$reason = @$beacon['reason'];
 
 
 		$dt = new DateTime($beacon['datetime']);
-		##$dt->modify('+4 hours');
+		//$dt->modify('+4 hours');
 
-		$output.=@"{$dt->format('M-d H:i:s')} | {$rssi} | {$beacon['freq']} | {$snr} | {$noise} | {$status} | {$reasonShort} <br>";
+		$output.=@"{$dt->format('M-d H:i:s')} | {$rssi} | {$beacon['freq']} | {$snr} | {$noise}  {$status} <br>";
 
 	}
 	return $output;
@@ -321,90 +263,41 @@ function extractData($logsFolder, $startDate, $endDate){
 
 		foreach ($lines as $line) {
 
-			if (preg_match('/miner_onion_server:send_witness:{[0-9]+,[0-9]+} (?:re-)?sending witness at RSSI/', $line) ||
-				preg_match('/miner_onion_server:send_witness:{[0-9]+,[0-9]+} failed to dial challenger/', $line) ||
-				preg_match('/miner_onion_server:send_witness:{[0-9]+,[0-9]+} successfully sent witness to challenger/', $line) ||
-				preg_match('/miner_onion_server:send_witness:{[0-9]+,[0-9]+} failed to send witness, max retry/', $line) ||
-				preg_match('/libp2p_transport_relay:connect_to:{[0-9]+,[0-9]+} init relay transport with/', $line)
-			)
+			if (preg_match('/miner_onion_server_light:decrypt:{[0-9]+,[0-9]+} (?:re-)?sending witness at RSSI/', $line) ||
+			   (preg_match('/@miner_poc_grpc_client_statem:send_report:{[0-9]+,[0-9]+} failed to submit report/', $line)))
 			{
-				$fields = explode(' ', $line);
-				$datetime = $fields[0] . " " . $fields[1];
-				if ($datetime<$startDate || $datetime>$endDate) {
-					continue;
-				}
-				$session = explode('>',explode('<', $fields[4])[1])[0];
-			} else {
-				continue;
-			}
+                $fields = explode(' ', $line);
+                $datetime = $fields[0] . " " . $fields[1];
+                if ($datetime<$startDate || $datetime>$endDate) {
+                    continue;
+                }
+                $session = explode('>',explode('<', $fields[4])[1])[0];
+            } else {
+                continue;
+            }
 
-			if (preg_match('/sending witness at RSSI/', $line)){
-				$rssi = substr($fields[9], 0, -1);
-				$freq = substr($fields[11], 0, -1);
-				$snr = $fields[13];
-				$status = "successfully sent";
-				$beacons[$session] = array_merge((array)@$beacons[$session], compact('datetime', 'session', 'rssi', 'freq', 'snr', 'status'));
-				continue;
-			}
+            if (preg_match('/sending witness at RSSI/', $line)){
+                $rssi = substr($fields[9], 0, -1);
+                $freq = substr($fields[11], 0, -1);
+                $snr = $fields[13];
+                $status = "successfully sent";
+                $beacons[$rssi.$freq.$snr] = array_merge((array)@$beacons[$rssi.$freq.$snr], compact('datetime', 'rssi', 'freq', 'snr', 'status'));
+                continue;
+            }
 
-			if (preg_match('/failed to dial challenger/', $line)) {
-				$challenger = substr($fields[9], 6, -2);
-				$reason = $fields[10];
-				if (strpos($line,'p2p-circuit')){
-					$relayed = 'yes';
-				} else {
-					$relayed = 'no';
-				}
+            if (preg_match('/failed to submit report/', $line)){
+                $temp = explode('<<',$fields[13]);
+                $temp1 = explode("," , $temp[1]);
+                $temp3 = explode("," , $temp[3]);
 
-				switch (true) {
-				case strpos($reason,'not_found') !== FALSE:
-					$reasonShort = "not found";
-					break;
-				case strpos($reason,'timeout') !== FALSE:
-					$reasonShort = "timeout";
-					break;
-				case strpos($reason,'econnrefused') !== FALSE:
-					$reasonShort = "connection refused";
-					break;
-				case strpos($reason,',ehostunreach') !== FALSE:
-					$reasonShort = "host unreachable";
-					break;
-				case strpos($reason,'no_listen_addr') !== FALSE:
-					$reasonShort = "no listen address";
-					break;
-				default:
-					$reasonShort = "";
-				};
+                $rssi = $temp1[sizeof($temp1)-2];
+                $freq = $temp3[2];
+                $snr = $temp3[1];
+                $status = "failed";
+                $beacons[$rssi.$freq.$snr] = array_merge((array)@$beacons[$rssi.$freq.$snr], compact('datetime', 'rssi', 'freq', 'snr', 'status'));
+                continue;
+            }
 
-				$failures = @$beacons[$session]['failures'] + 1;
-				$status = "failed to dial";
-				$beacons[$session] = array_merge((array)@$beacons[$session], compact('datetime', 'session', 'challenger', 'status', 'reason','reasonShort', 'relayed','failures'));
-				continue;
-			}
-
-			if (preg_match('/successfully sent witness to challenger/', $line)) {
-				$challenger = substr($fields[10], 6, -1);
-				$rssi = str_pad(substr($fields[13], 0, -1), 4, " ", STR_PAD_LEFT);
-				$freq = substr($fields[15], 0, -1);
-				$snr = $fields[17];
-				$status = "successfully sent";
-				$reason = "";
-				$reasonShort = "";
-				$beacons[$session] = array_merge((array)@$beacons[$session], compact('datetime', 'session', 'challenger', 'rssi', 'freq', 'snr', 'status', 'reason','reasonShort'));
-				continue;
-			}
-
-			if (preg_match('/failed to send witness, max retry/', $line)) {
-
-				$status = "failed max retry";
-				$beacons[$session] = array_merge((array)@$beacons[$session], compact('datetime', 'session', 'status'));
-				continue;
-			}
-
-			if (preg_match('/init relay transport/', $line)) {
-				$relayed = 'yes';
-				$beacons[$session] = array_merge((array)@$beacons[$session], compact('relayed'));
-			}
 		}
 	}
 	//
@@ -427,14 +320,14 @@ function extractData($logsFolder, $startDate, $endDate){
  * @return string
  */
 function generateCSV($beacons, $filename=false) {
-	$columns = ['Date','Session','RSSI','Freq','SNR','Noise','Challenger','Relay','Status','Fails','Reason'];
+	$columns = ['Date','Session','RSSI','Freq','SNR','Noise','Relay','Status','Fails','Reason'];
 	$data = array2csv($columns);
 	foreach ($beacons as $beacon){
 		$noise = number_format((float) ($beacon['rssi'] - $beacon['snr']),1);
 		$failures = empty($beacon['failures'])?0:$beacon['failures'];
 		$data.= @array2csv([
 			$beacon['datetime'],$beacon['session'],$beacon['rssi'],
-			$beacon['freq'],$beacon['snr'],$noise,$beacon['challenger'],
+			$beacon['freq'],$beacon['snr'],$noise,
 			$beacon['relayed'],$beacon['status'],$failures,$beacon['reasonShort']]);
 
 	}
@@ -465,3 +358,4 @@ function array2csv($fields, $delimiter = ",", $enclosure = '"', $escape_char = '
 	fclose($buffer);
 	return $csv;
 }
+

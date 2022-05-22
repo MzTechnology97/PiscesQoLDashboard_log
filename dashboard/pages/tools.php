@@ -1,4 +1,4 @@
-<h1>Pisces P100 Outdoor Miner Dashboard - Tools</h1>
+<h1>Sensecap M1 Miner Dashboard - Tools</h1>
 
 <div id="tools_buttons">
 	<ul>

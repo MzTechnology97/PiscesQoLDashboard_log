@@ -87,7 +87,7 @@ else if($vpn_type == 'pptp')
 }
 ?>
 
-<h1>Pisces P100 Outdoor Miner Dashboard - Configure VPN</h1>
+<h1>Sensecap M1 Miner Dashboard - Configure VPN</h1>
 
 <form id="vpn_info" action="?page=configurevpn&submit=1" method="post">
 	<ul>
