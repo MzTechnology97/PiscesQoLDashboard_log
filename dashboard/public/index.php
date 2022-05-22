@@ -84,6 +84,9 @@ else
 					include('/var/dashboard/pages/minerloganalyzer.php');
 					break;
 
+				case 'packetforwarder':
+					include('/var/dashboard/pages/packetforwarder.php');
+					break;
 
 				case '404':
 					include('/var/dashboard/pages/404.php');
