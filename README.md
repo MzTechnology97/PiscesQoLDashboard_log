@@ -1,18 +1,5 @@
 # Pisces QoL Dashboard + Miner Alyzer log + Packet Forwarder analyzer
 
-Log analysis of:
-
-
-https://github.com/inigoflores/helium-miner-log-analyzer
-
-
-https://github.com/inigoflores/lora-packet-forwarder-analyzer
-
-
-Advance log Page By:
-
-https://github.com/ahmetrizakorkut/PISCES-P100-TOOLS
-
 
 <img src="https://user-images.githubusercontent.com/86824210/169693145-129a343e-ba52-4dac-bc59-35830318d5fd.png" width="750" height="700">
 
@@ -65,3 +52,11 @@ As of v0.1.1, the dashboard now has an updater.  If you are running version v0.1
 1. Connect via SSH to your miner (either using PuTTY or open cmd and type:  ssh admin@YOURIP)
 2. Enter the admin username and the password you set.
 3. Type the following command:  sudo bash /var/dashboard/uninstall.sh
+
+## Credits ##
+
+- [Advanced Log Page](https://github.com/ahmetrizakorkut/PISCES-P100-TOOLS)
+- [Packet Forwarder Analyzer](https://github.com/inigoflores/lora-packet-forwarder-analyzer)
+- [Helium Miner Analyzer](https://github.com/inigoflores/helium-miner-log-analyzer)
+- [Dashboard](https://github.com/briffy/PiscesQoLDashboard)
+
