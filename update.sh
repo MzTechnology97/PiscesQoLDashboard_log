@@ -1,6 +1,6 @@
 #!/bin/bash
 #apt-get update
-apt-get -f install --assume-yes pptp-linux openvpn
+apt-get -f install --assume-yes pptp-linux openvpn bc
 
 if ! id "admin" &> /dev/null; then
   delgroup admin
