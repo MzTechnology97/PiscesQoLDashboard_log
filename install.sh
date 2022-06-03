@@ -20,7 +20,7 @@ if id -nG admin; then
     systemctl stop pm2-pi.service
     systemctl disable pm2-pi.service
     apt-get update
-    apt-get --assume-yes install nginx php-fpm php7.3-fpm pptp-linux openvpn php-cli ngrep gawk
+    apt-get --assume-yes install nginx php-fpm php7.3-fpm pptp-linux openvpn php-cli ngrep gawk bc
 
     mkdir /var/dashboard
     mkdir /etc/monitor-scripts
